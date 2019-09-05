@@ -1,6 +1,11 @@
 const express = require('express')
 const app = express()
 const mongoose = require('mongoose')
+const exphbs = require('express-handlebars')
+
+app.engine('handlebars', exphbs({ defaultLayout: 'main' }))
+app.set('view engine', 'handlebars')
+
 mongoose.connect('mongodb://localhost/todo', { useNewUrlParser: true })
 const db = mongoose.connection
 
@@ -14,7 +19,7 @@ db.once('open', () => {
 const Todo = require('./models/todo')
 
 app.get('/', (req, res) => {
-  res.send('HELLo')
+  res.render('index')
 })
 app.get('/todos', (req, res) => {
   res.send('列出所有 Todo')
