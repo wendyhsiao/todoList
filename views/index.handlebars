@@ -1,2 +1,12 @@
-<h2>index</h2>
-<a href="http://localhost:3000/" target="_blank">http://localhost:3000/</a>
+<a href="/todos/new">Create</a>
+
+<ul>
+  {{#each todos}}
+  <li>
+    {{{this.name}}}
+    <a href="#">detail</a>
+    <a href="#">edit</a>
+    <button type="submit">delete</button>
+  </li>
+  {{/each}}
+</ul>
