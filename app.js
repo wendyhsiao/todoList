@@ -2,9 +2,11 @@ const express = require('express')
 const app = express()
 const mongoose = require('mongoose')
 const exphbs = require('express-handlebars')
+const bodyParser = require('body-parser')
 
 app.engine('handlebars', exphbs({ defaultLayout: 'main' }))
 app.set('view engine', 'handlebars')
+app.use(bodyParser.urlencoded({ extended: true }))
 
 mongoose.connect('mongodb://localhost/todo', { useNewUrlParser: true })
 const db = mongoose.connection
@@ -29,10 +31,17 @@ app.get('/todos', (req, res) => {
   return res.redirect('/')
 })
 app.get('/todos/new', (req, res) => {
-  res.send('新增 Todo 頁面')
+  res.render('new')
 })
 app.post('/todos', (req, res) => {
-  res.send('建立 Todo')
+  const todo = new Todo({
+    name1: req.body.name
+  })
+
+  todo.save(err => {
+    if (err) return console.error(err)
+    return res.redirect('/')
+  })
 })
 app.get('/todos/:id', (req, res) => {
   res.send('顯示一筆 Todo 的詳細內容')
