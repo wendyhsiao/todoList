@@ -24,6 +24,8 @@ app.get('/', (req, res) => {
   Todo.find((err, todos) => {
     // 把 Todo model 所有的資料都抓回來
     if (err) return console.error(err)
+    console.log('todos', todos)
+
     return res.render('index', { todos: todos }) // 將資料傳給 index 樣板
   })
 })
@@ -35,7 +37,7 @@ app.get('/todos/new', (req, res) => {
 })
 app.post('/todos', (req, res) => {
   const todo = new Todo({
-    name1: req.body.name
+    name: req.body.name
   })
 
   todo.save(err => {
@@ -43,8 +45,14 @@ app.post('/todos', (req, res) => {
     return res.redirect('/')
   })
 })
+
 app.get('/todos/:id', (req, res) => {
-  res.send('顯示一筆 Todo 的詳細內容')
+  Todo.findById(req.params.id, (err, todo) => {
+    if (err) return console.error(err)
+    console.log('req.param', req.params)
+    console.log('todo', todo)
+    return res.render('detail', { todo: todo })
+  })
 })
 app.get('/todos/:id/edit', (req, res) => {
   res.send('修改 Todo 頁面')
