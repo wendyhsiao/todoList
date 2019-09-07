@@ -31,6 +31,7 @@ app.get('/', (req, res) => {
 app.get('/todos', (req, res) => {
   return res.redirect('/')
 })
+
 app.get('/todos/new', (req, res) => {
   res.render('new')
 })
@@ -60,7 +61,7 @@ app.get('/todos/:id/edit', (req, res) => {
     return res.render('edit', { todo: todo })
   })
 })
-app.post('/todos/:id/edit', (req, res) => {
+app.post('/todos/:id', (req, res) => {
   Todo.findById(req.params.id, (err, todo) => {
     if (err) return console.error(err)
     console.log('todo', todo)
@@ -72,11 +73,14 @@ app.post('/todos/:id/edit', (req, res) => {
   })
 })
 
-app.get('/todos/:id', (req, res) => {
-  res.send('顯示一筆todo')
-})
 app.post('/todos/:id/delete', (req, res) => {
-  res.send('刪除 Todo')
+  Todo.findById(req.params.id, (err, todo) => {
+    if (err) return console.error(err)
+    todo.remove(err => {
+      if (err) return console.error(err)
+      return res.redirect('/')
+    })
+  })
 })
 
 app.listen(3000, () => {
