@@ -24,8 +24,7 @@ app.get('/', (req, res) => {
   Todo.find((err, todos) => {
     // 把 Todo model 所有的資料都抓回來
     if (err) return console.error(err)
-    console.log('todos', todos)
-
+    // console.log('todos', todos)
     return res.render('index', { todos: todos }) // 將資料傳給 index 樣板
   })
 })
@@ -49,17 +48,30 @@ app.post('/todos', (req, res) => {
 app.get('/todos/:id', (req, res) => {
   Todo.findById(req.params.id, (err, todo) => {
     if (err) return console.error(err)
-    console.log('req.param', req.params)
-    console.log('todo', todo)
+    // console.log('req.param', req.params)
+    // console.log('todo', todo)
     return res.render('detail', { todo: todo })
   })
 })
+
 app.get('/todos/:id/edit', (req, res) => {
-  res.send('修改 Todo 頁面')
+  Todo.findById(req.params.id, (err, todo) => {
+    if (err) return console.error(err)
+    return res.render('edit', { todo: todo })
+  })
 })
 app.post('/todos/:id/edit', (req, res) => {
-  res.send('修改 Todo')
+  Todo.findById(req.params.id, (err, todo) => {
+    if (err) return console.error(err)
+    console.log('todo', todo)
+    todo.name = req.body.name
+    todo.save(err => {
+      if (err) return console.error(err)
+      return res.redirect(`/todos/${req.params.id}`)
+    })
+  })
 })
+
 app.get('/todos/:id', (req, res) => {
   res.send('顯示一筆todo')
 })
