@@ -21,12 +21,14 @@ db.once('open', () => {
 const Todo = require('./models/todo')
 
 app.get('/', (req, res) => {
-  Todo.find((err, todos) => {
-    // 把 Todo model 所有的資料都抓回來
-    if (err) return console.error(err)
-    // console.log('todos', todos)
-    return res.render('index', { todos: todos }) // 將資料傳給 index 樣板
-  })
+  Todo.find({})
+    .sort({ name: 'asc' })
+    .exec((err, todos) => {
+      // 把 Todo model 所有的資料都抓回來
+      if (err) return console.error(err)
+      // console.log('todos', todos)
+      return res.render('index', { todos: todos }) // 將資料傳給 index 樣板
+    })
 })
 app.get('/todos', (req, res) => {
   return res.redirect('/')
