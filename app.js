@@ -66,6 +66,12 @@ app.post('/todos/:id', (req, res) => {
     if (err) return console.error(err)
     console.log('todo', todo)
     todo.name = req.body.name
+    // console.log('req.body.done', req.body.done)
+    if (req.body.done === 'on') {
+      todo.done = true
+    } else {
+      todo.done = false
+    }
     todo.save(err => {
       if (err) return console.error(err)
       return res.redirect(`/todos/${req.params.id}`)
