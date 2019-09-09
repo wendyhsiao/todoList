@@ -25,6 +25,7 @@ const Todo = require('./models/todo')
 // 載入路由器
 app.use('/', require('./routes/home.js'))
 app.use('/todos', require('./routes/todo.js'))
+app.use('/users', require('./routes/user.js'))
 
 app.listen(3000, () => {
   console.log('done')
