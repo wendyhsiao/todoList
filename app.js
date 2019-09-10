@@ -5,18 +5,12 @@ const exphbs = require('express-handlebars')
 const bodyParser = require('body-parser')
 const methodOverride = require('method-override')
 const session = require('express-session')
+const passport = require('passport')
 
 app.engine('handlebars', exphbs({ defaultLayout: 'main' }))
 app.set('view engine', 'handlebars')
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(methodOverride('_method'))
-app.use(
-  session({
-    secret: 'your secret key', // secret: 定義一組屬於你的字串做為私鑰
-    resave: false,
-    saveUninitialized: true
-  })
-)
 
 mongoose.connect('mongodb://localhost/todo', { useNewUrlParser: true })
 const db = mongoose.connection
@@ -28,7 +22,25 @@ db.once('open', () => {
   console.log('mongodb connected!')
 })
 
-const Todo = require('./models/todo')
+app.use(
+  session({
+    secret: 'your secret key', // secret: 定義一組屬於你的字串做為私鑰
+    resave: false,
+    saveUninitialized: true
+  })
+)
+
+app.use(passport.initialize())
+app.use(passport.session())
+
+require('./config/passport.js')(passport)
+
+app.use((req, res, next) => {
+  res.locals.user = req.user
+  next()
+})
+
+// const Todo = require('./models/todo')
 
 // 載入路由器
 app.use('/', require('./routes/home.js'))
