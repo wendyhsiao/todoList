@@ -4,11 +4,19 @@ const mongoose = require('mongoose')
 const exphbs = require('express-handlebars')
 const bodyParser = require('body-parser')
 const methodOverride = require('method-override')
+const session = require('express-session')
 
 app.engine('handlebars', exphbs({ defaultLayout: 'main' }))
 app.set('view engine', 'handlebars')
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(methodOverride('_method'))
+app.use(
+  session({
+    secret: 'your secret key', // secret: 定義一組屬於你的字串做為私鑰
+    resave: false,
+    saveUninitialized: true
+  })
+)
 
 mongoose.connect('mongodb://localhost/todo', { useNewUrlParser: true })
 const db = mongoose.connection
