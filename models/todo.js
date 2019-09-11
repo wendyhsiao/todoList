@@ -8,6 +8,13 @@ const todoSchema = new Schema({
   done: {
     type: Boolean,
     default: false // 預設完成狀態為 false
+  },
+  // 加入 userId，建立跟 User 的關聯
+  userId: {
+    type: Schema.Types.ObjectId,
+    ref: 'User',
+    index: true,
+    required: true
   }
 })
 

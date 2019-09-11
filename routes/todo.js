@@ -12,7 +12,8 @@ router.get('/new', authenticated, (req, res) => {
 })
 router.post('/', authenticated, (req, res) => {
   const todo = new Todo({
-    name: req.body.name
+    name: req.body.name,
+    userId: req.user._id
   })
 
   todo.save(err => {
@@ -22,7 +23,7 @@ router.post('/', authenticated, (req, res) => {
 })
 
 router.get('/:id', authenticated, (req, res) => {
-  Todo.findById(req.params.id, (err, todo) => {
+  Todo.findOne({ _id: req.params.id, userId: req.user._id }, (err, todo) => {
     if (err) return console.error(err)
     // console.log('req.param', req.params)
     // console.log('todo', todo)
@@ -31,13 +32,13 @@ router.get('/:id', authenticated, (req, res) => {
 })
 
 router.get('/:id/edit', authenticated, (req, res) => {
-  Todo.findById(req.params.id, (err, todo) => {
+  Todo.findOne({ _id: req.params.id, userId: req.user._id }, (err, todo) => {
     if (err) return console.error(err)
     return res.render('edit', { todo: todo })
   })
 })
 router.put('/:id', authenticated, (req, res) => {
-  Todo.findById(req.params.id, (err, todo) => {
+  Todo.findOne({ _id: req.params.id, userId: req.user._id }, (err, todo) => {
     if (err) return console.error(err)
     console.log('todo', todo)
     todo.name = req.body.name
@@ -55,7 +56,7 @@ router.put('/:id', authenticated, (req, res) => {
 })
 
 router.delete('/:id/delete', authenticated, (req, res) => {
-  Todo.findById(req.params.id, (err, todo) => {
+  Todo.findOne({ _id: req.params.id, userId: req.user._id }, (err, todo) => {
     if (err) return console.error(err)
     todo.remove(err => {
       if (err) return console.error(err)
