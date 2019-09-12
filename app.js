@@ -1,5 +1,8 @@
 const express = require('express')
 const app = express()
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config()
+}
 const mongoose = require('mongoose')
 const exphbs = require('express-handlebars')
 const bodyParser = require('body-parser')
@@ -50,6 +53,7 @@ app.use((req, res, next) => {
 app.use('/', require('./routes/home.js'))
 app.use('/todos', require('./routes/todo.js'))
 app.use('/users', require('./routes/user.js'))
+app.use('/auth', require('./routes/auths.js'))
 
 app.listen(3000, () => {
   console.log('done')
